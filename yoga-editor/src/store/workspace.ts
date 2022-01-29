@@ -47,6 +47,7 @@ export const workspace = observable<IWorkspace>({
 
     this.overlappingNode = node;
 
+    // todo: move these to somewhere else
     untracked(() => {
       clearTimeout(this.insertTimer);
       if (node) {
@@ -77,6 +78,15 @@ export const workspace = observable<IWorkspace>({
               node.reparent(wrapper);
               this.flyingNode!.detatch();
               wrapper.appendChild(this.flyingNode!);
+              parent?.insertChild(wrapper, siblingIndex);
+            } else if (edge === "left") {
+              const wrapper = YogaNode.create();
+              wrapper.direction = yoga.FLEX_DIRECTION_ROW;
+              const siblingIndex = node.siblingIndex;
+              const parent = node.parent;
+              this.flyingNode!.detatch();
+              wrapper.appendChild(this.flyingNode!);
+              node.reparent(wrapper);
               parent?.insertChild(wrapper, siblingIndex);
             }
 
