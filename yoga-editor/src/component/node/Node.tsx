@@ -1,19 +1,17 @@
 import React, { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import styled from "styled-components";
-import Draggable from "react-draggable";
 import { Paper, Portal } from "@mui/material";
 
 import { YogaNode } from "@/store/model";
 import { useStores } from "@/store";
+import { stringToColor, toYogaWorld } from "@/util";
 
 interface NodeProps {
   node: YogaNode;
 }
 export const Node = observer(({ node }: NodeProps) => {
   const { workspace } = useStores();
-
-  const RootWrapper = node.isFlying ? Portal : React.Fragment;
 
   const style = node.isFlying
     ? overrideStyle(
@@ -25,18 +23,13 @@ export const Node = observer(({ node }: NodeProps) => {
       )
     : node.getComputedStyles();
 
-  console.log("isFlying", node.isFlying);
-
   const onClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     workspace.setActiveNode(node);
   };
   const onDragStart = (e: React.MouseEvent) => {
     e.stopPropagation();
-    node.flyingPosition = {
-      x: e.pageX,
-      y: e.pageY,
-    };
+    node.flyingPosition = toYogaWorld(e.clientX, e.clientY);
     node.setFlying(true);
 
     workspace.setFlyingNode(node);
@@ -52,12 +45,10 @@ export const Node = observer(({ node }: NodeProps) => {
     if (!node.isFlying) return;
 
     e.stopPropagation();
-    e.target.style.left = `${e.pageX - node.width / 2}px`;
-    e.target.style.top = `${e.pageY - node.height / 2}px`;
-    node.flyingPosition = {
-      x: e.pageX,
-      y: e.pageY,
-    };
+    const yogaPosition = toYogaWorld(e.clientX, e.clientY);
+    e.target.style.left = `${yogaPosition.x - node.width / 2}px`;
+    e.target.style.top = `${yogaPosition.y - node.height / 2}px`;
+    node.flyingPosition = yogaPosition;
   };
 
   if (node.isFlying) {
@@ -78,13 +69,14 @@ export const Node = observer(({ node }: NodeProps) => {
   const d = node.dirty;
 
   return (
-    <RootWrapper>
+    <Portal container={workspace.workspaceRoot} disablePortal={!node.isFlying}>
       <Container
         draggable="true"
         active={workspace.activeNode === node}
+        flying={node.isFlying}
         hovered={workspace.overlappingNode === node}
         edge={overlappingEdge}
-        style={style}
+        style={{ ...style, backgroundColor: stringToColor(node.id) }}
         onClick={onClick}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
@@ -95,8 +87,10 @@ export const Node = observer(({ node }: NodeProps) => {
         {node.children?.map((x, index) => (
           <Node key={index} node={x} />
         ))}
+
+        {node.id}
       </Container>
-    </RootWrapper>
+    </Portal>
   );
 });
 
@@ -121,6 +115,7 @@ const overrideStyle = (
 const Container = styled.div<{
   active: boolean;
   hovered: boolean;
+  flying: boolean;
   edge: EdgeKind | null;
 }>`
   position: absolute;
@@ -128,20 +123,35 @@ const Container = styled.div<{
 
   outline: 1.5px dashed #999;
 
+  background: white;
+
+  align-items: center;
+  justify-content: center;
+
   transition: all 0.245s ease;
-  transition-property: inset, border, width, height, left, top, background;
+  transition-property: transform, inset, border, width, height, left, top,
+    background;
 
   ${({ active }) =>
     active
       ? `
-      box-shadow: 0px 0px 15px 5px #3EB595;
+      box-shadow: 0px 0px 5px 5px rgba(0, 181, 255, 0.7);
+      transform: scale(1.025);
+      z-index: 10;
+  `
+      : `
+  `}
+  ${({ flying }) =>
+    flying
+      ? `
+      position: absolute;
+      opacity: 0.5;
   `
       : `
   `}
   ${({ hovered }) =>
     hovered
       ? `
-      
   `
       : `
   `}

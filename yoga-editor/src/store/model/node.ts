@@ -1,5 +1,6 @@
 import yoga, { Node } from "yoga-layout-prebuilt";
 import { makeAutoObservable } from "mobx";
+import { v4 as uuid } from "uuid";
 
 export class YogaNode {
   private node: yoga.YogaNode;
@@ -13,8 +14,6 @@ export class YogaNode {
   isFlying: boolean = false;
   dirty: number = 0;
 
-  private _previousParent: YogaNode | undefined;
-  private _previousIndex: number = 0;
   private _parent: YogaNode | undefined;
   get parent() {
     return this._parent;
@@ -96,8 +95,6 @@ export class YogaNode {
     this.node.setMargin(yoga.EDGE_LEFT, value.left);
     this._margin = value;
 
-    console.log("setmargin", value);
-
     this.parent?.markDirty();
   }
   get margin() {
@@ -110,11 +107,15 @@ export class YogaNode {
     return p;
   }
 
+  get siblingIndex() {
+    return this.parent?.children.indexOf(this) ?? -1;
+  }
+
   children: YogaNode[] = [];
 
   constructor() {
     this.node = Node.create();
-    this._id = `${Date.now()}`;
+    this._id = `${uuid().substring(0, 8)}`;
     makeAutoObservable(this);
   }
 
@@ -144,7 +145,6 @@ export class YogaNode {
   detatch() {
     if (!this.parent) return;
 
-    console.log("dett");
     this.parent.removeChild(this);
   }
 
