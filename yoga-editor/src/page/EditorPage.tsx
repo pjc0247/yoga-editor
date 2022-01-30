@@ -14,7 +14,7 @@ export const EditorPage = observer(() => {
   }, []);
 
   return (
-    <Container>
+    <Container onClick={() => workspace.setActiveNode(null)}>
       <InspectorWindow />
       <OutputWindow />
 

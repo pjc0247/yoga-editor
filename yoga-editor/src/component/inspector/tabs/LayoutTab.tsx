@@ -28,5 +28,8 @@ export const LayoutTab = observer(({ activeNode }: LayoutTabProps) => {
 });
 
 const Container = styled(Paper).attrs({})`
+  display: flex;
+  flex-direction: column;
+
   padding: 20px 20px;
 `;

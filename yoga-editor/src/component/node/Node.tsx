@@ -29,6 +29,8 @@ export const Node = observer(({ node }: NodeProps) => {
     : node.getComputedStyles();
 
   const onClick = (e: React.MouseEvent) => {
+    if (workspace.activeNode === node) return;
+
     e.stopPropagation();
     workspace.setActiveNode(node);
   };

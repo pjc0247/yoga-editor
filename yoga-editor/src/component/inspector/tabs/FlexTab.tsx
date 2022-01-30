@@ -64,5 +64,8 @@ export const FlexTab = observer(({ activeNode }: FlexTabProps) => {
 });
 
 const Container = styled(Paper).attrs({})`
+  display: flex;
+  flex-direction: column;
+
   padding: 20px 20px;
 `;

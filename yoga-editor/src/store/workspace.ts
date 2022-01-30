@@ -15,7 +15,7 @@ export interface IWorkspace {
 
   createWorkspace(): void;
 
-  setActiveNode(node: YogaNode): void;
+  setActiveNode(node: YogaNode | null): void;
   setFlyingNode(node: YogaNode | null): void;
   setOverlappingNode(node: YogaNode | null): void;
 }
@@ -36,13 +36,13 @@ export const workspace = observable<IWorkspace>({
     this.workspaceRoot = document.getElementById("yoga-root");
   },
 
-  setActiveNode(node: YogaNode) {
+  setActiveNode(node: YogaNode | null) {
     this.activeNode = node;
   },
-  setFlyingNode(node: YogaNode) {
+  setFlyingNode(node: YogaNode | null) {
     this.flyingNode = node;
   },
-  setOverlappingNode(node: YogaNode) {
+  setOverlappingNode(node: YogaNode | null) {
     if (this.overlappingNode === node) return;
 
     this.overlappingNode = node;
