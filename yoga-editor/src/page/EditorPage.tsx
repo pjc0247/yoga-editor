@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { useStores } from "@/store";
 import { InspectorWindow, Node, OutputWindow } from "@/component";
+import { NodeMenu } from "@/component/menu";
 
 export const EditorPage = observer(() => {
   const { workspace } = useStores();
@@ -16,6 +17,8 @@ export const EditorPage = observer(() => {
     <Container>
       <InspectorWindow />
       <OutputWindow />
+
+      <NodeMenu />
 
       <PreviewContainer id="yoga-root">
         {workspace.root && <Node node={workspace.root} />}

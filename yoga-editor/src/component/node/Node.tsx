@@ -2,16 +2,21 @@ import React, { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import { Paper, Portal } from "@mui/material";
+import { useContextMenu } from "react-contexify";
 
 import { YogaNode } from "@/store/model";
 import { useStores } from "@/store";
 import { stringToColor, toYogaWorld } from "@/util";
+import { NodeMenuID } from "@/component/menu";
 
 interface NodeProps {
   node: YogaNode;
 }
 export const Node = observer(({ node }: NodeProps) => {
   const { workspace } = useStores();
+  const { show: showContextMenu } = useContextMenu({
+    id: NodeMenuID,
+  });
 
   const style = node.isFlying
     ? overrideStyle(
@@ -50,6 +55,10 @@ export const Node = observer(({ node }: NodeProps) => {
     e.target.style.top = `${yogaPosition.y - node.height / 2}px`;
     node.flyingPosition = yogaPosition;
   };
+  const onContextMenu = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    showContextMenu(e, { props: { node } });
+  };
 
   if (node.isFlying) {
     const { x, y } = node.flyingPosition;
@@ -83,6 +92,7 @@ export const Node = observer(({ node }: NodeProps) => {
         onDrag={onDrag}
         onMouseUp={onDragEnd}
         onMouseMove={onDrag}
+        onContextMenu={onContextMenu}
       >
         {node.children?.map((x, index) => (
           <Node key={index} node={x} />

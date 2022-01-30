@@ -13,7 +13,8 @@ export const InspectorWindow = observer(({}: InspectorWindowProps) => {
   const [tab, setTab] = useState(0);
 
   const onAddNode = () => {
-    workspace.root?.appendChild(YogaNode.create());
+    const newNode = YogaNode.create();
+    workspace.root?.appendChild(newNode);
   };
 
   return (
