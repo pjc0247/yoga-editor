@@ -19,7 +19,7 @@ export const InspectorWindow = observer(({}: InspectorWindowProps) => {
   };
 
   return (
-    <Container>
+    <Container onClick={(e) => e.stopPropagation()}>
       <Button onClick={onAddNode}>add node</Button>
       {!!workspace.activeNode && (
         <>

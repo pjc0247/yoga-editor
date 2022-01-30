@@ -18,6 +18,8 @@ export const Node = observer(({ node }: NodeProps) => {
     id: NodeMenuID,
   });
 
+  console.log(node.isFlying);
+
   const style = node.isFlying
     ? overrideStyle(
         node.getComputedStyles(),
@@ -36,6 +38,7 @@ export const Node = observer(({ node }: NodeProps) => {
   };
   const onDragStart = (e: React.MouseEvent) => {
     e.stopPropagation();
+
     node.flyingPosition = toYogaWorld(e.clientX, e.clientY);
     node.setFlying(true);
 

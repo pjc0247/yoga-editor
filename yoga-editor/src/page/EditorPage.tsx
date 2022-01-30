@@ -15,8 +15,10 @@ export const EditorPage = observer(() => {
 
   return (
     <Container onClick={() => workspace.setActiveNode(null)}>
-      <InspectorWindow />
-      <OutputWindow />
+      <WindowContainer>
+        <InspectorWindow />
+        <OutputWindow />
+      </WindowContainer>
 
       <NodeMenu />
 
@@ -45,4 +47,8 @@ const PreviewContainer = styled.div`
   > div:nth-child(1) {
     position: relative !important;
   }
+`;
+
+const WindowContainer = styled.div`
+  z-index: 1000;
 `;

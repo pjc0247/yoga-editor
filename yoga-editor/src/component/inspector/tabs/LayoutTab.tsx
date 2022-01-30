@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import { Box, Button, Paper, Tab, Tabs } from "@mui/material";
+import { TextField, Button, Paper, Tab, Tabs } from "@mui/material";
 
 import { useStores } from "@/store";
 import { YogaNode } from "@/store/model";
@@ -15,6 +15,15 @@ export const LayoutTab = observer(({ activeNode }: LayoutTabProps) => {
 
   return (
     <Container>
+      <TextField
+        value={activeNode.width}
+        onChange={(e) => (activeNode.width = +e.target.value)}
+      />
+      <TextField
+        value={activeNode.height}
+        onChange={(e) => (activeNode.height = +e.target.value)}
+      />
+
       <EdgeValues
         value={activeNode.padding}
         onChange={(e) => (activeNode.padding = e)}

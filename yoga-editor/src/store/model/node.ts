@@ -55,7 +55,7 @@ export class YogaNode {
     this.node.setFlex(value);
     this._flex = value;
 
-    this.markDirty();
+    this.markDirty("layout");
   }
   get flex() {
     return this._flex;
@@ -66,7 +66,7 @@ export class YogaNode {
     this.node.setFlexBasis(value);
     this._flexBasis = value;
 
-    this.markDirty();
+    this.markDirty("layout");
   }
   get flexBasis() {
     return this._flexBasis;
@@ -77,7 +77,7 @@ export class YogaNode {
     this.node.setWidth(value);
     this._width = value;
 
-    this.markDirty();
+    this.markDirty("layout");
   }
   get width() {
     return this._width;
@@ -88,7 +88,7 @@ export class YogaNode {
     this.node.setHeight(value);
     this._height = value;
 
-    this.markDirty();
+    this.markDirty("layout");
   }
   get height() {
     return this._height;
@@ -102,7 +102,7 @@ export class YogaNode {
     this.node.setPadding(yoga.EDGE_LEFT, value.left);
     this._padding = value;
 
-    this.parent?.markDirty();
+    this.markDirty("layout");
   }
   get padding() {
     return this._padding;
@@ -116,7 +116,7 @@ export class YogaNode {
     this.node.setMargin(yoga.EDGE_LEFT, value.left);
     this._margin = value;
 
-    this.parent?.markDirty();
+    this.markDirty("layout");
   }
   get margin() {
     return this._margin;
@@ -158,9 +158,14 @@ export class YogaNode {
     return node;
   }
 
-  markDirty() {
-    this.dirty = Date.now();
-    this.children.forEach((x) => x.markDirty());
+  markDirty(dirtyKind: "layout" | "property" = "property") {
+    if (dirtyKind === "layout") {
+      if (this.parent) this.parent.markDirty();
+      else this.markDirty();
+    } else {
+      this.dirty = Date.now();
+      this.children.forEach((x) => x.markDirty());
+    }
   }
 
   detatch() {
