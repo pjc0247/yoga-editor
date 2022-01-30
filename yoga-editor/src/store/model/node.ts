@@ -72,7 +72,7 @@ export class YogaNode {
     return this._flexBasis;
   }
 
-  private _width: number = 320;
+  private _width: number = NaN;
   set width(value: number) {
     this.node.setWidth(value);
     this._width = value;
@@ -83,7 +83,7 @@ export class YogaNode {
     return this._width;
   }
 
-  private _height: number = 320;
+  private _height: number = NaN;
   set height(value: number) {
     this.node.setHeight(value);
     this._height = value;
@@ -120,6 +120,28 @@ export class YogaNode {
   }
   get margin() {
     return this._margin;
+  }
+
+  private _alignItems: yoga.YogaAlign = yoga.ALIGN_AUTO;
+  set alignItems(value: yoga.YogaAlign) {
+    this.node.setAlignItems(value);
+    this._alignItems = value;
+
+    this.markDirty();
+  }
+  get alignItems() {
+    return this._alignItems;
+  }
+
+  private _justifyContent: yoga.YogaJustifyContent = yoga.JUSTIFY_FLEX_START;
+  set justifyContent(value: yoga.YogaJustifyContent) {
+    this.node.setJustifyContent(value);
+    this._justifyContent = value;
+
+    this.markDirty();
+  }
+  get justifyContent() {
+    return this._justifyContent;
   }
 
   get root() {

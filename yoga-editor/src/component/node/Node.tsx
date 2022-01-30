@@ -18,8 +18,6 @@ export const Node = observer(({ node }: NodeProps) => {
     id: NodeMenuID,
   });
 
-  console.log(node.isFlying);
-
   const style = node.isFlying
     ? overrideStyle(
         node.getComputedStyles(),
