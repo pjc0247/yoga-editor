@@ -6,6 +6,7 @@ import { Box, Button, Paper, Tab, Tabs } from "@mui/material";
 import { useStores } from "@/store";
 import { YogaNode } from "@/store/model";
 import { EdgeValues } from "@/component/input";
+import { FlexTab, LayoutTab } from "./tabs";
 
 interface InspectorWindowProps {}
 export const InspectorWindow = observer(({}: InspectorWindowProps) => {
@@ -27,16 +28,8 @@ export const InspectorWindow = observer(({}: InspectorWindowProps) => {
             <Tab label="Layout" />
             <Tab label="Alignment" />
           </Tabs>
-          <Box>
-            <EdgeValues
-              value={workspace.activeNode.padding}
-              onChange={(e) => (workspace.activeNode!.padding = e)}
-            />
-            <EdgeValues
-              value={workspace.activeNode.margin}
-              onChange={(e) => (workspace.activeNode!.margin = e)}
-            />
-          </Box>
+          {tab === 0 && <FlexTab activeNode={workspace.activeNode} />}
+          {tab === 1 && <LayoutTab activeNode={workspace.activeNode} />}
         </>
       )}
     </Container>

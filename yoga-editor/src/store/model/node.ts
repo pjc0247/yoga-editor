@@ -28,10 +28,23 @@ export class YogaNode {
     return this._position;
   }
 
+  private _overflow: yoga.YogaOverflow = yoga.OVERFLOW_VISIBLE;
+  set overflow(value: yoga.YogaOverflow) {
+    this.node.setOverflow(value);
+    this._overflow = value;
+
+    this.markDirty();
+  }
+  get overflow() {
+    return this._overflow;
+  }
+
   private _direction: yoga.YogaDirection = yoga.FLEX_DIRECTION_COLUMN;
   set direction(value: yoga.YogaDirection) {
     this.node.setFlexDirection(value);
     this._direction = value;
+
+    this.markDirty();
   }
   get direction() {
     return this._direction;
@@ -41,6 +54,8 @@ export class YogaNode {
   set flex(value: number) {
     this.node.setFlex(value);
     this._flex = value;
+
+    this.markDirty();
   }
   get flex() {
     return this._flex;
@@ -50,6 +65,8 @@ export class YogaNode {
   set flexBasis(value: number) {
     this.node.setFlexBasis(value);
     this._flexBasis = value;
+
+    this.markDirty();
   }
   get flexBasis() {
     return this._flexBasis;
@@ -59,6 +76,8 @@ export class YogaNode {
   set width(value: number) {
     this.node.setWidth(value);
     this._width = value;
+
+    this.markDirty();
   }
   get width() {
     return this._width;
@@ -68,6 +87,8 @@ export class YogaNode {
   set height(value: number) {
     this.node.setHeight(value);
     this._height = value;
+
+    this.markDirty();
   }
   get height() {
     return this._height;
@@ -122,7 +143,7 @@ export class YogaNode {
   static create() {
     const node = new YogaNode();
     node.flex = 1;
-    node.flexBasis = 100;
+    //node.flexBasis = 100;
     node.position = yoga.POSITION_TYPE_RELATIVE;
     node.direction = yoga.FLEX_DIRECTION_COLUMN;
     node.padding = { top: 4, right: 4, bottom: 4, left: 4 };
